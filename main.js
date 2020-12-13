@@ -1,42 +1,13 @@
-"use strict";
+import State from "./modules/state.js";
 
-class State {
-  constructor() {
-    const currentImg = document.querySelector(
-      "#color .fieldset__input:checked + .fieldset__label img"
-    );
-    if (!currentImg) {
-      console.error("current img not found");
-      return;
-    }
-    this.currentImg = currentImg;
-  }
-}
-
-const colorRadioImgs = document.querySelectorAll("#color .fieldset__label img");
-const objectSrcMap = new Map([
-  ["robot", "robot"],
-  ["target", "star-solid"],
-  ["pipe1", "line-bltr"],
-  ["pipe2", "line-tlbr"],
-]);
-function updateColorRadioImgs(obj) {
-  for (const img of colorRadioImgs) {
-    img.src = `static/${objectSrcMap.get(obj.id)}-${
-      img.parentElement.htmlFor
-    }.svg`;
-    img.alt = `${img.parentElement.htmlFor} ${obj.id}`;
-  }
-}
-
-function initColorRadio() {
+function initColorRadio(state) {
   const currentObj = document.querySelector("#object .fieldset__input:checked");
   if (!currentObj) {
     console.error("current obj not found");
     return;
   }
 
-  updateColorRadioImgs(currentObj);
+  state.updateColorRadioImgs(currentObj);
 }
 
 function registerObjectRadio(state) {
@@ -47,7 +18,7 @@ function registerObjectRadio(state) {
   }
 
   function handleObjectRadio(e) {
-    updateColorRadioImgs(e.target);
+    state.updateColorRadioImgs(e.target);
   }
   objectRadio.addEventListener("input", handleObjectRadio);
 }
@@ -67,7 +38,7 @@ function registerColorRadio(state) {
 
 function registerHandlers() {
   const state = new State();
-  initColorRadio();
+  initColorRadio(state);
   registerObjectRadio(state);
   registerColorRadio(state);
 }
