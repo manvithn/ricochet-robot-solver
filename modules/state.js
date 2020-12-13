@@ -19,6 +19,23 @@ class State {
     this.colorRadioImgs = document.querySelectorAll(
       "#color .fieldset__label img"
     );
+
+    const grid = document.querySelector(".grid");
+    if (!grid) {
+      console.error("grid not found");
+      return;
+    }
+    const gridElements = [...grid.children];
+    this.gridSquares = gridElements.filter((e) => e.matches(".grid__square"));
+    this.gridHorizontalEdges = gridElements.filter((e) =>
+      e.matches(".grid__edge--horizontal:not(.grid__wall--border)")
+    );
+    this.gridVerticalEdges = gridElements.filter((e) =>
+      e.matches(".grid__edge--vertical:not(.grid__wall--border)")
+    );
+    this.gridCorners = gridElements.filter((e) =>
+      e.matches(".grid__corner:not(.grid__wall--border)")
+    );
   }
 
   updateColorRadioImgs(obj) {
