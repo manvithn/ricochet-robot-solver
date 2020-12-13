@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Ricochet Robot Solver</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Titillium+Web&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Code+Pro&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <header class="body__e body__e--first">
+      <h1 class="header__h header__h--spaced">
+        <a class="a--no-style" href="https://www.ricochetrobotsolver.com">Ricochet Robot Solver</a>
+      </h1>
+    </header>
+
+    <main class="body__e">
+      <section class="main__e instruc">
+        <h2 class="main__h">Instructions</h2>
+        <ul>
+          <li>
+            <p class="main__p">
+              Click squares to place robots, targets, and pipes. Click again to clear squares.
+            </p>
+          </li>
+          <li>
+            <p class="main__p">Click borders to place walls. Click again to clear walls.</p>
+          </li>
+        </ul>
+      </section>
+
+      <section class="main__e config">
+        <div class="config__fb">
+          <fieldset id="object" class="config__fieldset">
+            <legend class="main__h fieldset__legend">Object</legend>
+            <div class="fieldset__options">
+              <input
+                class="fieldset__input"
+                type="radio"
+                name="object-option"
+                id="robot"
+                value="robot"
+                checked
+              />
+              <label class="fieldset__label" for="robot">
+                <img class="fieldset__img" src="/static/robot.svg" alt="image of robot" />
+              </label>
+              <input
+                class="fieldset__input"
+                type="radio"
+                name="object-option"
+                id="target"
+                value="target"
+              />
+              <label class="fieldset__label" for="target">
+                <img class="fieldset__img" src="/static/star-outline.svg" alt="image of target" />
+              </label>
+              <input
+                class="fieldset__input"
+                type="radio"
+                name="object-option"
+                id="pipe1"
+                value="pipe1"
+              />
+              <label class="fieldset__label" for="pipe1">
+                <img
+                  class="fieldset__img"
+                  src="/static/line-bltr.svg"
+                  alt="image of bottom-left to top-right"
+                />
+              </label>
+              <input
+                class="fieldset__input"
+                type="radio"
+                name="object-option"
+                id="pipe2"
+                value="pipe2"
+              />
+              <label class="fieldset__label" for="pipe2">
+                <img
+                  class="fieldset__img"
+                  src="/static/line-tlbr.svg"
+                  alt="image of pipe top-left to bottom-right"
+                />
+              </label>
+            </div>
+          </fieldset>
+          <fieldset id="color" class="config__fieldset">
+            <legend class="main__h fieldset__legend">Color</legend>
+            <div class="fieldset__options">
+              <input
+                class="fieldset__input"
+                type="radio"
+                name="color-option"
+                id="red"
+                value="red"
+                checked
+              />
+              <label class="fieldset__label" for="red">
+                <img class="fieldset__img" src="/static/robot-red.svg" alt="red robot" />
+              </label>
+              <input
+                class="fieldset__input"
+                type="radio"
+                name="color-option"
+                id="yellow"
+                value="yellow"
+              />
+              <label class="fieldset__label" for="yellow">
+                <img class="fieldset__img" src="/static/robot-yellow.svg" alt="yellow robot" />
+              </label>
+              <input
+                class="fieldset__input"
+                type="radio"
+                name="color-option"
+                id="blue"
+                value="blue"
+              />
+              <label class="fieldset__label" for="blue">
+                <img class="fieldset__img" src="/static/robot-blue.svg" alt="blue robot" />
+              </label>
+              <input
+                class="fieldset__input"
+                type="radio"
+                name="color-option"
+                id="green"
+                value="green"
+              />
+              <label class="fieldset__label" for="green">
+                <img class="fieldset__img" src="/static/robot-green.svg" alt="green robot" />
+              </label>
+              <input
+                class="fieldset__input"
+                type="radio"
+                name="color-option"
+                id="black"
+                value="black"
+              />
+              <label class="fieldset__label" for="black">
+                <img class="fieldset__img" src="/static/robot-black.svg" alt="black robot" />
+              </label>
+            </div>
+          </fieldset>
+        </div>
+      </section>
+
+      <div class="main__e main__e--grid grid">
+        <div class="grid__corner grid__wall grid__wall--border grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal grid__wall grid__wall--border"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal grid__wall grid__wall--border"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal grid__wall grid__wall--border"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal grid__wall grid__wall--border"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal grid__wall grid__wall--border"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal grid__wall grid__wall--border"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal grid__wall grid__wall--border"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal grid__wall grid__wall--border"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal grid__wall grid__wall--border"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal grid__wall grid__wall--border"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal grid__wall grid__wall--border"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal grid__wall grid__wall--border"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal grid__wall grid__wall--border"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal grid__wall grid__wall--border"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal grid__wall grid__wall--border"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal grid__wall grid__wall--border"></div>
+        <div class="grid__corner grid__wall grid__wall--border grid__wall--border"></div>
+
+        <div class="grid__edge grid__edge--vertical grid__wall grid__wall--border"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical grid__wall grid__wall--border"></div>
+
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+
+        <div class="grid__edge grid__edge--vertical grid__wall grid__wall--border"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical grid__wall grid__wall--border"></div>
+
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+
+        <div class="grid__edge grid__edge--vertical grid__wall grid__wall--border"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical grid__wall grid__wall--border"></div>
+
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+
+        <div class="grid__edge grid__edge--vertical grid__wall grid__wall--border"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical grid__wall grid__wall--border"></div>
+
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+
+        <div class="grid__edge grid__edge--vertical grid__wall grid__wall--border"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical grid__wall grid__wall--border"></div>
+
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+
+        <div class="grid__edge grid__edge--vertical grid__wall grid__wall--border"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical grid__wall grid__wall--border"></div>
+
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+
+        <div class="grid__edge grid__edge--vertical grid__wall grid__wall--border"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical grid__wall grid__wall--border"></div>
+
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+
+        <div class="grid__edge grid__edge--vertical grid__wall grid__wall--border"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical grid__wall grid__wall--border"></div>
+
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+
+        <div class="grid__edge grid__edge--vertical grid__wall grid__wall--border"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical grid__wall grid__wall--border"></div>
+
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+
+        <div class="grid__edge grid__edge--vertical grid__wall grid__wall--border"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical grid__wall grid__wall--border"></div>
+
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+
+        <div class="grid__edge grid__edge--vertical grid__wall grid__wall--border"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical grid__wall grid__wall--border"></div>
+
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+
+        <div class="grid__edge grid__edge--vertical grid__wall grid__wall--border"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical grid__wall grid__wall--border"></div>
+
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+
+        <div class="grid__edge grid__edge--vertical grid__wall grid__wall--border"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical grid__wall grid__wall--border"></div>
+
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+
+        <div class="grid__edge grid__edge--vertical grid__wall grid__wall--border"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical grid__wall grid__wall--border"></div>
+
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+
+        <div class="grid__edge grid__edge--vertical grid__wall grid__wall--border"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical grid__wall grid__wall--border"></div>
+
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner"></div>
+        <div class="grid__edge grid__edge--horizontal"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+
+        <div class="grid__edge grid__edge--vertical grid__wall grid__wall--border"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical"></div>
+        <div class="grid__square"></div>
+        <div class="grid__edge grid__edge--vertical grid__wall grid__wall--border"></div>
+
+        <div class="grid__corner grid__wall grid__wall--border grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal grid__wall grid__wall--border"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal grid__wall grid__wall--border"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal grid__wall grid__wall--border"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal grid__wall grid__wall--border"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal grid__wall grid__wall--border"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal grid__wall grid__wall--border"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal grid__wall grid__wall--border"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal grid__wall grid__wall--border"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal grid__wall grid__wall--border"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal grid__wall grid__wall--border"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal grid__wall grid__wall--border"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal grid__wall grid__wall--border"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal grid__wall grid__wall--border"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal grid__wall grid__wall--border"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal grid__wall grid__wall--border"></div>
+        <div class="grid__corner grid__wall grid__wall--border"></div>
+        <div class="grid__edge grid__edge--horizontal grid__wall grid__wall--border"></div>
+        <div class="grid__corner grid__wall grid__wall--border grid__wall--border"></div>
+      </div>
+
+      <section class="main__e controls">
+        <div class="controls__fb">
+          <div class="controls__solution solution">
+            <h2 class="solution__h solution__h--spaced">Solution</h2>
+            <ol class="solution__moves"></ol>
+          </div>
+          <button
+            class="main__button controls__button controls__button--push-right"
+            type="button"
+            disabled
+          >
+            Play
+          </button>
+          <button
+            id="solve"
+            class="main__button controls__button controls__button--push-right"
+            type="button"
+          >
+            Solve
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="body__e body__e--push-down">
+      <section class="footer__e">
+        <div class="footer__fb">
+          <p class="footer__p footer__p--push-right">
+            <a class="a--small" href="https://www.github.com">View source on Github</a>
+          </p>
+        </div>
+      </section>
+    </footer>
+
+    <script src="main.js"></script>
+  </body>
+</html>

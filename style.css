@@ -1,0 +1,325 @@
+/* Begin CSS Reset */
+
+html,
+body,
+h1,
+h2,
+p,
+ol,
+ul,
+li,
+fieldset,
+legend,
+label,
+header,
+main,
+footer,
+div,
+span {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+header,
+main,
+footer {
+  display: block;
+}
+
+ul {
+  list-style: none;
+}
+
+/* End CSS Reset */
+
+body {
+  min-height: 100vh;
+  background-color: white;
+  color: black;
+  font: 1rem/1.5rem "Source Code Pro", monospace;
+  display: flex;
+  flex-direction: column;
+}
+
+.body__e {
+  margin-bottom: 1.5rem;
+}
+
+.body__e--first {
+  margin: 2.5rem;
+}
+
+.body__e--push-down {
+  margin-top: auto;
+}
+
+header {
+  text-align: center;
+}
+
+.header__h {
+  font: 2em/1.5rem "Titillium Web", sans-serif;
+  font-weight: 400;
+}
+
+.header__h--spaced {
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+}
+
+.a--no-style {
+  color: inherit;
+  text-decoration: none;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.main__e {
+  width: max(40rem, 45vw);
+  margin-bottom: 0.7rem;
+}
+
+.main__h {
+  font-size: 1em;
+  font-weight: 600;
+}
+
+.main__p {
+  font-size: 0.8em;
+  font-weight: 300;
+}
+
+.main__button {
+  font: 1rem/1.5rem "Source Sans Pro", sans-serif;
+  font-weight: 600;
+}
+
+.config__fb {
+  display: flex;
+  flex-direction: row;
+  margin: 0 -1.5rem;
+}
+
+.config__fieldset {
+  margin: 0 1.5rem;
+}
+
+#object {
+  flex: 4;
+}
+
+#color {
+  flex: 5;
+}
+
+fieldset {
+  display: flex;
+  flex-direction: column;
+}
+
+.fieldset__legend {
+  float: left;
+  margin-bottom: 0.4rem;
+}
+
+.fieldset__options {
+  display: flex;
+  flex-direction: row;
+}
+
+.fieldset__input {
+  display: none;
+}
+
+.fieldset__input:checked + .fieldset__label {
+  background-color: rgb(194, 194, 194);
+}
+
+.fieldset__label {
+  flex: 1;
+  display: block;
+  line-height: normal;
+  cursor: pointer;
+  border: 2px solid rgb(194, 194, 194);
+  border-radius: 0.625rem;
+  text-align: center;
+  margin: 0 0.2rem;
+  transition: background-color 0.3s ease;
+}
+
+.fieldset__label:first-of-type {
+  margin: 0 0.2rem 0 0;
+}
+
+.fieldset__label:last-of-type {
+  margin: 0 0 0 0.2rem;
+}
+
+.fieldset__label:hover {
+  background-color: rgb(194, 194, 194);
+}
+
+.fieldset__img {
+  display: inline-block;
+  vertical-align: top;
+  padding: 0.35rem;
+  height: 2.8rem;
+}
+
+.main__e--grid {
+  margin-bottom: 0.6rem;
+}
+
+.grid {
+  width: max(40rem, 45vw);
+  height: max(40rem, 45vw);
+  display: grid;
+  grid-template-columns: repeat(16, 1fr 6fr) 1fr;
+  grid-template-rows: repeat(16, 1fr 6fr) 1fr;
+}
+
+.grid__corner {
+  background-color: rgb(194, 194, 194);
+}
+
+.grid__edge {
+  background-color: rgb(194, 194, 194);
+}
+
+.grid__wall {
+  background-color: rgb(65, 65, 65);
+}
+
+.grid__edge:not(.grid__wall):hover {
+  background-color: #9c9fa7;
+}
+
+.grid__square:hover {
+  background-color: #e6e9ed;
+}
+
+.grid__img {
+  display: inline-block;
+  vertical-align: top;
+  box-sizing: border-box;
+  padding: 0.1rem;
+  width: 100%;
+}
+
+.controls__fb {
+  display: flex;
+  flex-direction: row;
+  margin: 0 -0.6rem;
+}
+
+.controls__solution {
+  flex: 1;
+  margin: 0 0.6rem;
+  border: 2px solid rgb(194, 194, 194);
+  border-radius: 0.3125rem;
+  box-sizing: border-box;
+  min-height: 2.5rem;
+}
+
+.solution {
+  padding: 0.35rem 0.6rem;
+}
+
+.solution__h {
+  font: 0.9rem/1.5rem "Titillium Web", sans-serif;
+  font-weight: 700;
+  color: rgb(110, 110, 110);
+}
+
+.solution__h--spaced {
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+}
+
+.solution__moves {
+  list-style-type: none;
+  display: flex;
+  flex-direction: row;
+  margin: 0 -0.4rem;
+  margin-top: 0.25rem;
+}
+
+.solution__moves:empty {
+  display: none;
+}
+
+.solution__move {
+  float: left;
+  margin: 0 0.4rem;
+}
+
+.solution__img {
+  height: 2.5rem;
+}
+
+.controls__button {
+  margin: 0 0.6rem;
+  cursor: pointer;
+  font: 1.1em/1.5rem "Titillium Web", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #434a54;
+  border: 2px solid rgb(194, 194, 194);
+  border-radius: 0.3125rem;
+  background-color: inherit;
+  padding: 0 1rem;
+  width: min(8rem, 6vw);
+  height: 2.5rem;
+  box-sizing: border-box;
+  transition: background-color 0.3s ease;
+}
+
+.controls__button:disabled {
+  cursor: not-allowed;
+  color: rgb(215, 215, 215);
+}
+
+.controls__button:not(:disabled):hover {
+  background-color: rgb(194, 194, 194);
+}
+
+.controls__button--push-right {
+  margin-left: auto;
+}
+
+footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.footer__e {
+  width: max(40rem, 45vw);
+}
+
+.footer__fb {
+  display: flex;
+  flex-direction: row;
+}
+
+.footer__p {
+  font: 0.875em/1.5rem "Source Sans Pro", sans-serif;
+  font-weight: 400;
+  color: rgb(170, 170, 170);
+}
+
+.footer__p--push-right {
+  margin-left: auto;
+}
+
+.a--small {
+  color: inherit;
+}
