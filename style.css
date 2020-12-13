@@ -275,8 +275,8 @@ fieldset {
   border: 2px solid rgb(194, 194, 194);
   border-radius: 0.3125rem;
   background-color: inherit;
-  padding: 0 1rem;
-  width: min(8rem, 6vw);
+  padding: 0 0.6rem;
+  width: clamp(5rem, 8vw, 8rem);
   height: 2.5rem;
   box-sizing: border-box;
   transition: background-color 0.3s ease;
