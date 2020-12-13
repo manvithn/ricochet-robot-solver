@@ -13,6 +13,32 @@ class State {
   }
 }
 
+const colorRadioImgs = document.querySelectorAll("#color .fieldset__label img");
+const objectSrcMap = new Map([
+  ["robot", "robot"],
+  ["target", "star-solid"],
+  ["pipe1", "line-bltr"],
+  ["pipe2", "line-tlbr"],
+]);
+function updateColorRadioImgs(obj) {
+  for (const img of colorRadioImgs) {
+    img.src = `static/${objectSrcMap.get(obj.id)}-${
+      img.parentElement.htmlFor
+    }.svg`;
+    img.alt = `${img.parentElement.htmlFor} ${obj.id}`;
+  }
+}
+
+function initColorRadio() {
+  const currentObj = document.querySelector("#object .fieldset__input:checked");
+  if (!currentObj) {
+    console.error("current obj not found");
+    return;
+  }
+
+  updateColorRadioImgs(currentObj);
+}
+
 function registerObjectRadio(state) {
   const objectRadio = document.querySelector("#object .fieldset__options");
   if (!objectRadio) {
@@ -20,22 +46,8 @@ function registerObjectRadio(state) {
     return;
   }
 
-  const colorRadioImgs = document.querySelectorAll(
-    "#color .fieldset__label img"
-  );
-  const objectSrcMap = new Map([
-    ["robot", "robot"],
-    ["target", "star-solid"],
-    ["pipe1", "line-bltr"],
-    ["pipe2", "line-tlbr"],
-  ]);
   function handleObjectRadio(e) {
-    for (const img of colorRadioImgs) {
-      img.src = `static/${objectSrcMap.get(e.target.id)}-${
-        img.parentElement.htmlFor
-      }.svg`;
-      img.alt = `${img.parentElement.htmlFor} ${e.target.id}`;
-    }
+    updateColorRadioImgs(e.target);
   }
   objectRadio.addEventListener("input", handleObjectRadio);
 }
@@ -55,6 +67,7 @@ function registerColorRadio(state) {
 
 function registerHandlers() {
   const state = new State();
+  initColorRadio();
   registerObjectRadio(state);
   registerColorRadio(state);
 }
