@@ -56,10 +56,10 @@ class Board {
     for (const [i, e] of state.gridSquares.entries()) {
       const img = e.firstElementChild;
       if (img) {
-        const matchRobot = img.src.match(/robot-(.*).svg/);
-        const matchPipe1 = img.src.match(/line-bltr-(.*).svg/);
-        const matchPipe2 = img.src.match(/line-tlbr-(.*).svg/);
-        const matchTarget = img.src.match(/star-solid-(.*).svg/);
+        const matchRobot = img.src.match(/.*robot-(.*).svg/);
+        const matchPipe1 = img.src.match(/.*line-bltr-(.*).svg/);
+        const matchPipe2 = img.src.match(/.*line-tlbr-(.*).svg/);
+        const matchTarget = img.src.match(/.*star-solid-(.*).svg/);
         if (matchRobot) {
           robotPositions.set(matchRobot[1], new Position(i));
         } else if (matchPipe1) {
