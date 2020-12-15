@@ -1,5 +1,6 @@
 import { State } from "./modules/state.js";
 import { Position, Target, Board } from "./modules/board.js";
+import { Solver } from "./modules/solver.js";
 
 function initColorRadio(state) {
   const currentObj = document.querySelector("#object .fieldset__input:checked");
@@ -124,12 +125,30 @@ function registerGrid(state) {
   }
 }
 
+function registerSolve(state) {
+  const solve = document.querySelector("#solve");
+  if (!solve) {
+    console.error("solve button not found");
+    return;
+  }
+
+  function handleSolve() {
+    state.clearSolution();
+    const board = Board.generateBoardFromState(state);
+    const solver = new Solver(board);
+    const moves = solver.solve();
+    state.displaySolution(moves);
+  }
+  solve.addEventListener("click", handleSolve);
+}
+
 (function () {
   const state = new State();
   initColorRadio(state);
   registerObjectRadio(state);
   registerColorRadio(state);
   registerGrid(state);
+  registerSolve(state);
 
   // prettier-ignore
   const horizontalWalls = [
@@ -186,5 +205,5 @@ function registerGrid(state) {
     pipe2Positions,
     target
   );
-  board.load(state);
+  board.loadBoardToState(state);
 })();

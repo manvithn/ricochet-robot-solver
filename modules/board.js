@@ -30,6 +30,74 @@ class Target {
 }
 
 class Board {
+  static generateBoardFromState(state) {
+    const horizontalWalls = [];
+    for (const e of state.gridHorizontalEdges) {
+      if (e.matches(".grid__wall")) {
+        horizontalWalls.push(1);
+      } else {
+        horizontalWalls.push(0);
+      }
+    }
+
+    const verticalWalls = [];
+    for (const e of state.gridVerticalEdges) {
+      if (e.matches(".grid__wall")) {
+        verticalWalls.push(1);
+      } else {
+        verticalWalls.push(0);
+      }
+    }
+
+    const robotPositions = new Map();
+    const pipe1Positions = new Map();
+    const pipe2Positions = new Map();
+    let target;
+    for (const [i, e] of state.gridSquares.entries()) {
+      const img = e.firstElementChild;
+      if (img) {
+        const matchRobot = img.src.match(/robot-(.*).svg/);
+        const matchPipe1 = img.src.match(/line-bltr-(.*).svg/);
+        const matchPipe2 = img.src.match(/line-tlbr-(.*).svg/);
+        const matchTarget = img.src.match(/star-solid-(.*).svg/);
+        if (matchRobot) {
+          robotPositions.set(matchRobot[1], new Position(i));
+        } else if (matchPipe1) {
+          if (pipe1Positions.has(matchPipe1[1])) {
+            pipe1Positions.get(matchPipe1[1]).push(new Position(i));
+          } else {
+            pipe1Positions.set(matchPipe1[1], [new Position(i)]);
+          }
+        } else if (matchPipe2) {
+          if (pipe2Positions.has(matchPipe2[1])) {
+            pipe2Positions.get(matchPipe2[1]).push(new Position(i));
+          } else {
+            pipe2Positions.set(matchPipe2[1], [new Position(i)]);
+          }
+        } else if (matchTarget) {
+          if (target) {
+            alert("Only one target can be set");
+            return;
+          }
+          target = new Target(matchTarget[1], new Position(i));
+        }
+      }
+    }
+    if (!target) {
+      alert("No target has been set");
+      return;
+    }
+
+    return new Board(
+      horizontalWalls,
+      verticalWalls,
+      robotPositions,
+      pipe1Positions,
+      pipe2Positions,
+      target
+    );
+  }
+
   constructor(
     horizontalWalls,
     verticalWalls,
@@ -46,7 +114,7 @@ class Board {
     this.target = target;
   }
 
-  load(state) {
+  loadBoardToState(state) {
     for (const [i, val] of this.horizontalWalls.entries()) {
       if (val) {
         state.gridHorizontalEdges[i].click();
