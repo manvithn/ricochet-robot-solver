@@ -263,6 +263,11 @@ fieldset {
 
 .solution__img {
   height: 2.5rem;
+  cursor: pointer;
+}
+
+.solution__img:hover {
+  filter: drop-shadow(0 0 1.5px rgb(80, 80, 80));
 }
 
 .controls__button {
