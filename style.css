@@ -202,11 +202,18 @@ fieldset {
   background-color: #9c9fa7;
 }
 
+.grid__square {
+  position: relative;
+}
+
 .grid__square:hover {
   background-color: #e6e9ed;
 }
 
 .grid__img {
+  position: absolute;
+  top: 0;
+  left: 0;
   display: inline-block;
   vertical-align: top;
   box-sizing: border-box;

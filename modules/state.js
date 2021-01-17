@@ -13,6 +13,33 @@ const directionRotationMap = new Map([
 ]);
 
 class State {
+  static matchImg(img) {
+    const resource = img.src.substring(img.src.lastIndexOf("/") + 1);
+    const matchRobot = resource.match(/robot-(.*).svg/);
+    const matchPipe1 = resource.match(/line-bltr-(.*).svg/);
+    const matchPipe2 = resource.match(/line-tlbr-(.*).svg/);
+    const matchTarget = resource.match(/star-solid-(.*).svg/);
+    return [matchRobot, matchPipe1, matchPipe2, matchTarget];
+  }
+
+  static getTargetFromSquare(square) {
+    const layer = square.querySelector(".grid__layer--target");
+    if (!layer) {
+      console.error("grid square does not contain expected layer");
+      return null;
+    }
+    return [layer, layer.firstElementChild];
+  }
+
+  static getObjectFromSquare(square) {
+    const layer = square.querySelector(".grid__layer--object");
+    if (!layer) {
+      console.error("grid square does not contain expected layer");
+      return null;
+    }
+    return [layer, layer.firstElementChild];
+  }
+
   constructor() {
     const currentImg = document.querySelector(
       "#color .fieldset__input:checked + .fieldset__label img"
@@ -63,12 +90,11 @@ class State {
 
   clearRobots() {
     for (const square of this.gridSquares) {
-      const child = square.firstElementChild;
-      if (child) {
-        const resource = child.src.substring(child.src.lastIndexOf("/") + 1);
-        const matchRobot = resource.match(/robot-(.*).svg/);
+      const [, img] = State.getObjectFromSquare(square);
+      if (img) {
+        const [matchRobot, , ,] = State.matchImg(img);
         if (matchRobot) {
-          child.remove();
+          img.remove();
         }
       }
     }
@@ -98,16 +124,19 @@ class State {
     const endPos = node.current.get(node.color);
     const startSquare = this.gridSquares[startPos.hash()];
     const endSquare = this.gridSquares[endPos.hash()];
-    const img = startSquare.firstElementChild;
+    const [, img] = State.getObjectFromSquare(endSquare);
     if (!img) {
       console.error("robot start img not found for animation");
+      return;
     }
 
-    const tx = endSquare.offsetLeft - startSquare.offsetLeft;
-    const ty = endSquare.offsetTop - startSquare.offsetTop;
-    img.animate([{ transform: `translate(${tx}px, ${ty}px)` }], {
+    // robot is already in final position
+    // derive translation to start position
+    const tx = startSquare.offsetLeft - endSquare.offsetLeft;
+    const ty = startSquare.offsetTop - endSquare.offsetTop;
+    // use translation as starting keyframe and animate to final position
+    img.animate([{ transform: `translate(${tx}px, ${ty}px)`, offset: 0 }], {
       duration: 500,
-      fill: "forwards",
     });
   }
 
@@ -135,7 +164,7 @@ class State {
       const clone = template.cloneNode(true);
       const handleMove = () => {
         this.clearRobots();
-        this.displayRobots(node.previous);
+        this.displayRobots(node.current);
         this.animateRobots(node);
       };
       clone.firstElementChild.addEventListener("click", handleMove);

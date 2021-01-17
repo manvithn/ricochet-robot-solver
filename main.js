@@ -48,7 +48,10 @@ function registerGrid(state) {
       return templateImg;
     }
 
-    const child = e.currentTarget.firstElementChild;
+    const [, , , matchTarget] = State.matchImg(state.currentImg);
+    const [layer, child] = matchTarget
+      ? State.getTargetFromSquare(e.currentTarget)
+      : State.getObjectFromSquare(e.currentTarget);
     if (child) {
       if (child.src === state.currentImg.src) {
         child.remove();
@@ -56,7 +59,7 @@ function registerGrid(state) {
         child.replaceWith(genGridImg());
       }
     } else {
-      e.currentTarget.appendChild(genGridImg());
+      layer.appendChild(genGridImg());
     }
   }
   for (const e of state.gridSquares) {

@@ -1,3 +1,5 @@
+import { State } from "./state.js";
+
 class Position {
   constructor(arg1, arg2) {
     if (arg2 === undefined) {
@@ -54,15 +56,30 @@ class Board {
     const pipe2Positions = new Map();
     let target;
     for (const [i, e] of state.gridSquares.entries()) {
-      const img = e.firstElementChild;
-      if (img) {
-        const resource = img.src.substring(img.src.lastIndexOf("/") + 1);
-        const matchRobot = resource.match(/robot-(.*).svg/);
-        const matchPipe1 = resource.match(/line-bltr-(.*).svg/);
-        const matchPipe2 = resource.match(/line-tlbr-(.*).svg/);
-        const matchTarget = resource.match(/star-solid-(.*).svg/);
+      const [, imgTgt] = State.getTargetFromSquare(e);
+      if (imgTgt) {
+        const [, , , matchTarget] = State.matchImg(imgTgt);
+        if (matchTarget) {
+          if (target) {
+            alert("Only one target can be set");
+            return;
+          }
+          target = new Target(matchTarget[1], new Position(i));
+        } else {
+          console.error("invalid board state");
+          return;
+        }
+      }
+      const [, imgObj] = State.getObjectFromSquare(e);
+      if (imgObj) {
+        const [matchRobot, matchPipe1, matchPipe2, ,] = State.matchImg(imgObj);
         if (matchRobot) {
-          robotPositions.set(matchRobot[1], new Position(i));
+          if (robotPositions.has(matchRobot[1])) {
+            alert("Cannot have more than one robot of a given color");
+            return;
+          } else {
+            robotPositions.set(matchRobot[1], new Position(i));
+          }
         } else if (matchPipe1) {
           if (pipe1Positions.has(matchPipe1[1])) {
             pipe1Positions.get(matchPipe1[1]).push(new Position(i));
@@ -75,12 +92,9 @@ class Board {
           } else {
             pipe2Positions.set(matchPipe2[1], [new Position(i)]);
           }
-        } else if (matchTarget) {
-          if (target) {
-            alert("Only one target can be set");
-            return;
-          }
-          target = new Target(matchTarget[1], new Position(i));
+        } else {
+          console.error("invalid board state");
+          return;
         }
       }
     }
