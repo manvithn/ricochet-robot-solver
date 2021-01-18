@@ -1,3 +1,5 @@
+import { Utils } from "./img_utils.js";
+
 const objectSrcMap = new Map([
   ["robot", "robot"],
   ["target", "star-solid"],
@@ -13,33 +15,6 @@ const directionRotationMap = new Map([
 ]);
 
 class State {
-  static matchImg(img) {
-    const resource = img.src.substring(img.src.lastIndexOf("/") + 1);
-    const matchRobot = resource.match(/robot-(.*).svg/);
-    const matchPipe1 = resource.match(/line-bltr-(.*).svg/);
-    const matchPipe2 = resource.match(/line-tlbr-(.*).svg/);
-    const matchTarget = resource.match(/star-solid-(.*).svg/);
-    return [matchRobot, matchPipe1, matchPipe2, matchTarget];
-  }
-
-  static getTargetFromSquare(square) {
-    const layer = square.querySelector(".grid__layer--target");
-    if (!layer) {
-      console.error("grid square does not contain expected layer");
-      return null;
-    }
-    return [layer, layer.firstElementChild];
-  }
-
-  static getObjectFromSquare(square) {
-    const layer = square.querySelector(".grid__layer--object");
-    if (!layer) {
-      console.error("grid square does not contain expected layer");
-      return null;
-    }
-    return [layer, layer.firstElementChild];
-  }
-
   constructor() {
     const currentImg = document.querySelector(
       "#color .fieldset__input:checked + .fieldset__label img"
@@ -90,9 +65,9 @@ class State {
 
   clearRobots() {
     for (const square of this.gridSquares) {
-      const [, img] = State.getObjectFromSquare(square);
+      const [, img] = Utils.getObjectFromSquare(square);
       if (img) {
-        const [matchRobot, , ,] = State.matchImg(img);
+        const [matchRobot, , ,] = Utils.matchImg(img);
         if (matchRobot) {
           img.remove();
         }
@@ -124,7 +99,7 @@ class State {
     const endPos = node.current.get(node.color);
     const startSquare = this.gridSquares[startPos.hash()];
     const endSquare = this.gridSquares[endPos.hash()];
-    const [, img] = State.getObjectFromSquare(endSquare);
+    const [, img] = Utils.getObjectFromSquare(endSquare);
     if (!img) {
       console.error("robot start img not found for animation");
       return;

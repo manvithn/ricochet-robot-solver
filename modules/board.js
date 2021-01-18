@@ -1,6 +1,28 @@
-import { State } from "./state.js";
+import { Utils } from "./img_utils.js";
+
+const comparableMap = new Map([
+  ["up", (a, b) => a.x === b.x],
+  ["down", (a, b) => a.x === b.x],
+  ["left", (a, b) => a.y === b.y],
+  ["right", (a, b) => a.y === b.y],
+]);
+
+const compareMap = new Map([
+  ["up", (a, b) => b.y - a.y],
+  ["down", (a, b) => a.y - b.y],
+  ["left", (a, b) => b.x - a.x],
+  ["right", (a, b) => a.x - b.x],
+]);
 
 class Position {
+  static isdirectionalComparable(dir) {
+    return comparableMap.get(dir);
+  }
+
+  static directionalCompare(dir) {
+    return compareMap.get(dir);
+  }
+
   constructor(arg1, arg2) {
     if (arg2 === undefined) {
       this.x = arg1 % 16;
@@ -19,8 +41,8 @@ class Position {
     return this.y * 16 + this.x;
   }
 
-  inBounds() {
-    return this.x >= 0 && this.x < 16 && this.y >= 0 && this.y < 16;
+  clone() {
+    return new Position(this.x, this.y);
   }
 }
 
@@ -56,9 +78,9 @@ class Board {
     const pipe2Positions = new Map();
     let target;
     for (const [i, e] of state.gridSquares.entries()) {
-      const [, imgTgt] = State.getTargetFromSquare(e);
+      const [, imgTgt] = Utils.getTargetFromSquare(e);
       if (imgTgt) {
-        const [, , , matchTarget] = State.matchImg(imgTgt);
+        const [, , , matchTarget] = Utils.matchImg(imgTgt);
         if (matchTarget) {
           if (target) {
             alert("Only one target can be set");
@@ -70,9 +92,9 @@ class Board {
           return;
         }
       }
-      const [, imgObj] = State.getObjectFromSquare(e);
+      const [, imgObj] = Utils.getObjectFromSquare(e);
       if (imgObj) {
-        const [matchRobot, matchPipe1, matchPipe2, ,] = State.matchImg(imgObj);
+        const [matchRobot, matchPipe1, matchPipe2, ,] = Utils.matchImg(imgObj);
         if (matchRobot) {
           if (robotPositions.has(matchRobot[1])) {
             alert("Cannot have more than one robot of a given color");

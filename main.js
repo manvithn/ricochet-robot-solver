@@ -1,4 +1,5 @@
 import { State } from "./modules/state.js";
+import { Utils } from "./modules/img_utils.js";
 import { Position, Target, Board } from "./modules/board.js";
 import { Solver } from "./modules/solver.js";
 
@@ -48,10 +49,10 @@ function registerGrid(state) {
       return templateImg;
     }
 
-    const [, , , matchTarget] = State.matchImg(state.currentImg);
+    const [, , , matchTarget] = Utils.matchImg(state.currentImg);
     const [layer, child] = matchTarget
-      ? State.getTargetFromSquare(e.currentTarget)
-      : State.getObjectFromSquare(e.currentTarget);
+      ? Utils.getTargetFromSquare(e.currentTarget)
+      : Utils.getObjectFromSquare(e.currentTarget);
     if (child) {
       if (child.src === state.currentImg.src) {
         child.remove();
@@ -198,8 +199,11 @@ function registerSolve(state) {
     ["black", new Position(4, 0)],
   ]);
   const pipe1Positions = new Map();
-  const pipe2Positions = new Map();
-  const target = new Target("black", new Position(0, 15));
+  const pipe2Positions = new Map([
+    ["red", [new Position(4, 2)]],
+    ["yellow", [new Position(0, 2)]],
+  ]);
+  const target = new Target("black", new Position(6, 3));
   const board = new Board(
     horizontalWalls,
     verticalWalls,
