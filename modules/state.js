@@ -94,25 +94,56 @@ class State {
     }
   }
 
-  animateRobots(node) {
-    const startPos = node.previous.get(node.color);
-    const endPos = node.current.get(node.color);
-    const startSquare = this.gridSquares[startPos.hash()];
-    const endSquare = this.gridSquares[endPos.hash()];
-    const [, img] = Utils.getObjectFromSquare(endSquare);
+  animateRobots(pathState) {
+    const positions = pathState.path.bounces.map((b) => b.pos);
+    positions.push(pathState.path.end);
+
+    // compute translations and lengths and so we can derive the correct offsets
+    const keyframeInfo = [];
+    let distance = 0;
+    for (let i = positions.length - 1, tx = 0, ty = 0; i > 0; --i) {
+      const startPos = positions[i - 1];
+      const endPos = positions[i];
+      const startSquare = this.gridSquares[startPos.hash()];
+      const endSquare = this.gridSquares[endPos.hash()];
+
+      // derive translation to start position
+      const dx = startSquare.offsetLeft - endSquare.offsetLeft;
+      const dy = startSquare.offsetTop - endSquare.offsetTop;
+      tx += dx;
+      ty += dy;
+      const length = Math.abs(dx) + Math.abs(dy);
+      distance += length;
+      keyframeInfo.push({
+        tx: tx,
+        ty: ty,
+        length: length,
+      });
+    }
+    keyframeInfo.reverse();
+
+    let traversed = 0;
+    const keyframes = keyframeInfo.map((info) => {
+      const kf = {
+        transform: `translate(${info.tx}px, ${info.ty}px)`,
+        offset: traversed / distance,
+      };
+      traversed += info.length;
+      return kf;
+    });
+
+    this.clearRobots();
+    this.displayRobots(pathState.endPositions);
+
+    const endSq = this.gridSquares[pathState.path.end.hash()];
+    const [, img] = Utils.getObjectFromSquare(endSq);
     if (!img) {
       console.error("robot start img not found for animation");
       return;
     }
-
-    // robot is already in final position
-    // derive translation to start position
-    const tx = startSquare.offsetLeft - endSquare.offsetLeft;
-    const ty = startSquare.offsetTop - endSquare.offsetTop;
-    // use translation as starting keyframe and animate to final position
-    img.animate([{ transform: `translate(${tx}px, ${ty}px)`, offset: 0 }], {
-      duration: 500,
-    });
+    // robot is in final position
+    // use translations as starting keyframe and animate to final position
+    img.animate(keyframes, { duration: distance * 2 });
   }
 
   clearSolution() {
@@ -120,7 +151,7 @@ class State {
     this.solutionMoves.replaceChildren();
   }
 
-  displaySolution(moves) {
+  displaySolution(pathStates) {
     const template = document.createDocumentFragment();
     const templateMove = document.createElement("li");
     templateMove.classList.add("solution__move");
@@ -129,18 +160,16 @@ class State {
     templateMove.appendChild(templateImg);
     template.appendChild(templateMove);
 
-    for (const node of moves) {
-      const { color, direction } = node;
+    for (const p of pathStates) {
+      const { color, dir } = p;
       templateImg.src = `static/up-arrow-${color}.svg`;
-      templateImg.alt = `${color} arrow pointing ${direction}.svg`;
-      const angle = directionRotationMap.get(direction);
+      templateImg.alt = `${color} arrow pointing ${dir}.svg`;
+      const angle = directionRotationMap.get(dir);
       templateImg.style.transform = `rotate(${angle}deg)`;
 
       const clone = template.cloneNode(true);
       const handleMove = () => {
-        this.clearRobots();
-        this.displayRobots(node.current);
-        this.animateRobots(node);
+        this.animateRobots(p);
       };
       clone.firstElementChild.addEventListener("click", handleMove);
       this.solutionMoves.appendChild(clone);

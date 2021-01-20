@@ -89,9 +89,9 @@ class Path {
       console.error("invalid path provided");
       return;
     }
-    const bounces = path.bounces.map((b) => b.clone());
-    bounces[0] = new Bounce(start.clone(), dir);
-    return new Path(bounces, path.end.clone());
+    const ret = path.clone();
+    ret.bounces[0] = new Bounce(start.clone(), dir);
+    return ret;
   }
 
   static makePathFromPipePath(start, dir, path) {
@@ -99,27 +99,49 @@ class Path {
       console.error("invalid path provided");
       return;
     }
-    const bounces = path.bounces.map((b) => b.clone());
-    bounces.unshift(new Bounce(start.clone(), dir));
-    return new Path(bounces, path.end.clone());
+    const ret = path.clone();
+    ret.bounces.unshift(new Bounce(start.clone(), dir));
+    return ret;
   }
 
   constructor(bounces, end) {
     this.bounces = bounces;
     this.end = end;
   }
+
+  clone() {
+    const bounces = this.bounces.map((b) => b.clone());
+    const end = this.end.clone();
+    return new Path(bounces, end);
+  }
+}
+
+class Move {
+  constructor(startPositions, color, dir) {
+    this.startPositions = startPositions;
+    this.color = color;
+    this.dir = dir;
+  }
 }
 
 class Node {
-  constructor(currentPos, previousPos, color, direction) {
-    this.current = currentPos;
-    this.previous = previousPos;
-    this.color = color;
-    this.direction = direction;
+  constructor(move, endPositions) {
+    this.move = move;
+    this.endPositions = endPositions;
   }
 
   isRoot() {
-    return this.previous ? true : false;
+    return !this.move;
+  }
+}
+
+class PathState {
+  constructor(node, path) {
+    this.color = node.move.color;
+    this.dir = node.move.dir;
+    this.startPositions = node.move.startPositions;
+    this.endPositions = node.endPositions;
+    this.path = path;
   }
 }
 
@@ -304,35 +326,72 @@ class Solver {
     return path.end.clone();
   }
 
-  computePosition(robotPositions, robotColor, dir) {
-    const start = robotPositions.get(robotColor);
-    const path = this.paths.get(start.hash()).get(robotColor).get(dir);
+  computeEndPositions({ startPositions, color, dir }) {
+    const startHash = startPositions.get(color).hash();
+    const path = this.paths.get(startHash).get(color).get(dir);
     if (!path) {
       return null;
     }
-    const end = this.findEnd(path, robotPositions, robotColor);
+    const end = this.findEnd(path, startPositions, color);
     if (!end) {
       return null;
     }
     const ret = new Map();
-    for (const [k, v] of robotPositions) {
-      const val = k === robotColor ? end.clone() : v.clone();
+    for (const [k, v] of startPositions) {
+      const val = k === color ? end.clone() : v.clone();
       ret.set(k, val);
     }
     return ret;
   }
 
-  solve() {
-    function getSolution(positions) {
-      const moves = [];
-      while (positions) {
-        const h = hashRobotPositions(positions);
-        const n = nodes.get(h);
-        moves.push(n);
-        positions = n.previous;
+  findPath(path, robotPositions, robotColor) {
+    for (let i = 0; i < path.bounces.length - 1; ++i) {
+      const curr = path.bounces[i].pos;
+      const dir = path.bounces[i].dir;
+      const next = path.bounces[i + 1].pos;
+      const stop = this.intersect(curr, dir, next, robotPositions, robotColor);
+      if (stop) {
+        if (curr.equals(stop)) {
+          return null;
+        } else {
+          const bounces = path.bounces.slice(0, i + 1).map((b) => b.clone());
+          return new Path(bounces, stop);
+        }
       }
-      return moves.reverse().slice(1);
     }
+    const curr = path.bounces[path.bounces.length - 1].pos;
+    const dir = path.bounces[path.bounces.length - 1].dir;
+    const next = path.end;
+    const stop = this.intersect(curr, dir, next, robotPositions, robotColor);
+    if (stop) {
+      if (curr.equals(stop)) {
+        return null;
+      } else {
+        const bounces = path.bounces.map((b) => b.clone());
+        return new Path(bounces, stop);
+      }
+    }
+    return path.clone();
+  }
+
+  computePath({ startPositions, color, dir }) {
+    const startHash = startPositions.get(color).hash();
+    const path = this.paths.get(startHash).get(color).get(dir);
+    if (!path) {
+      return null;
+    }
+    return this.findPath(path, startPositions, color);
+  }
+
+  solve() {
+    const getSolution = (node) => {
+      const pathStates = [];
+      while (!node.isRoot()) {
+        pathStates.push(new PathState(node, this.computePath(node.move)));
+        node = nodes.get(hashRobotPositions(node.move.startPositions));
+      }
+      return pathStates.reverse();
+    };
 
     const tcolor = this.target.color;
     const tposition = this.target.position;
@@ -345,35 +404,35 @@ class Solver {
     const nodes = new Map();
     nodes.set(
       hashRobotPositions(this.robotPositions),
-      new Node(this.robotPositions, null, null, null)
+      new Node(null, this.robotPositions)
     );
     const explore = [this.robotPositions];
 
     while (explore.length) {
       const current = explore.shift();
-      for (const color of current.keys()) {
-        for (const direction of ["up", "down", "left", "right"]) {
-          const next = this.computePosition(current, color, direction);
-
+      for (const color of this.robotPositions.keys()) {
+        for (const dir of ["up", "down", "left", "right"]) {
+          const move = new Move(current, color, dir);
+          const next = this.computeEndPositions(move);
           if (!next) {
             // this is an invalid move
             continue;
           }
 
-          if (nodes.has(hashRobotPositions(next))) {
+          const nextHash = hashRobotPositions(next);
+          if (nodes.has(nextHash)) {
             // we've already visited this board state
             // the current path must be at least as long as the existing path
             continue;
           }
-          nodes.set(
-            hashRobotPositions(next),
-            new Node(next, current, color, direction)
-          );
+
+          const nextNode = new Node(move, next);
+          nodes.set(nextHash, nextNode);
           explore.push(next);
 
-          if (next.get(tcolor).equals(tposition)) {
+          if (nextNode.endPositions.get(tcolor).equals(tposition)) {
             // we've reached the target, return solution
-            return getSolution(next);
+            return getSolution(nextNode);
           }
         }
       }
@@ -384,4 +443,4 @@ class Solver {
   }
 }
 
-export { Node, Solver };
+export { PathState, Solver };
