@@ -140,10 +140,23 @@ function registerSolve(state) {
     state.clearSolution();
     const board = Board.generateBoardFromState(state);
     const solver = new Solver(board);
-    const moves = solver.solve();
-    state.displaySolution(moves);
+    state.setSolution(solver.solve());
+    state.enablePlay();
   }
   solve.addEventListener("click", handleSolve);
+}
+
+function registerPlay(state) {
+  const play = document.querySelector("#play");
+  if (!play) {
+    console.error("play button not found");
+    return;
+  }
+
+  function handlePlay() {
+    state.playSolution();
+  }
+  play.addEventListener("click", handlePlay);
 }
 
 (function () {
@@ -153,6 +166,7 @@ function registerSolve(state) {
   registerColorRadio(state);
   registerGrid(state);
   registerSolve(state);
+  registerPlay(state);
 
   // prettier-ignore
   const horizontalWalls = [

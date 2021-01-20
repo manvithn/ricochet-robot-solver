@@ -46,6 +46,7 @@ class State {
       e.matches(".grid__corner:not(.grid__wall--border)")
     );
 
+    this.solution = null;
     const solutionMoves = document.querySelector(".solution__moves");
     if (!solutionMoves) {
       console.error("solution moves not found");
@@ -143,12 +144,7 @@ class State {
     }
     // robot is in final position
     // use translations as starting keyframe and animate to final position
-    img.animate(keyframes, { duration: distance * 2 });
-  }
-
-  clearSolution() {
-    // remove all children
-    this.solutionMoves.replaceChildren();
+    return img.animate(keyframes, { duration: distance * 2 });
   }
 
   displaySolution(pathStates) {
@@ -174,6 +170,39 @@ class State {
       clone.firstElementChild.addEventListener("click", handleMove);
       this.solutionMoves.appendChild(clone);
     }
+  }
+
+  setSolution(solution) {
+    this.solution = solution;
+    this.displaySolution(solution);
+  }
+
+  clearSolution() {
+    // remove all children
+    this.solutionMoves.replaceChildren();
+    this.solution = null;
+  }
+
+  enablePlay() {
+    const play = document.querySelector("#play");
+    if (!play) {
+      console.error("play button not found");
+      return;
+    }
+    play.disabled = false;
+  }
+
+  playSolution() {
+    if (!this.solution) {
+      console.error("playSolution called when solution has not been set");
+      return;
+    }
+    (async () => {
+      for (const p of this.solution) {
+        const animation = this.animateRobots(p);
+        await animation.finished;
+      }
+    })();
   }
 }
 
