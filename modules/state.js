@@ -64,34 +64,31 @@ class State {
     }
   }
 
-  clearRobots() {
+  moveRobots(robotPositions) {
+    const robotImgs = new Map();
     for (const square of this.gridSquares) {
       const [, img] = Utils.getObjectFromSquare(square);
       if (img) {
         const [matchRobot, , ,] = Utils.matchImg(img);
         if (matchRobot) {
           img.remove();
+          robotImgs.set(matchRobot[1], img);
         }
       }
     }
-  }
-
-  displayRobots(robotPositions) {
-    const colorOptionMap = new Map();
-    for (const img of this.colorRadioImgs) {
-      colorOptionMap.set(img.parentElement.htmlFor, img);
-    }
-
-    const robotOption = document.querySelector("#robot");
-    if (!robotOption) {
-      console.error("robot option not found");
-      return;
-    }
-    robotOption.click();
 
     for (const [color, position] of robotPositions) {
-      colorOptionMap.get(color).click();
-      this.gridSquares[position.hash()].click();
+      const square = this.gridSquares[position.hash()];
+      const [layer, obj] = Utils.getObjectFromSquare(square);
+      if (obj) {
+        console.error("Trying to move robot to position with existing image");
+        return;
+      }
+      if (!robotImgs.has(color)) {
+        console.error("Missing robots in current state");
+        return;
+      }
+      layer.appendChild(robotImgs.get(color));
     }
   }
 
@@ -133,8 +130,7 @@ class State {
       return kf;
     });
 
-    this.clearRobots();
-    this.displayRobots(pathState.endPositions);
+    this.moveRobots(pathState.endPositions);
 
     const endSq = this.gridSquares[pathState.path.end.hash()];
     const [, img] = Utils.getObjectFromSquare(endSq);
